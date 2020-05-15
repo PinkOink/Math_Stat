@@ -42,8 +42,8 @@ for (n in size) {
   
   # calculate error for var confidence interval
   U <- qnorm(quant) * sqrt((kurtosis(data) + 2) / n)
-  left_err <- s * (1 - U / 2)
-  right_err <- s * (1 + U / 2)
+  left_err <- (1 - U / 2)
+  right_err <- (1 + U / 2)
   
   # get var confidence interval
   s_left_as <- s * left_err
