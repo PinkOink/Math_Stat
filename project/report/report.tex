@@ -1,0 +1,203 @@
+\include{settings}
+\usepackage{amsmath}
+
+\begin{document}	% начало документа
+
+% Титульная страница
+\include{titlepage}
+
+% Содержание
+\renewcommand\contentsname{\centerline{Содержание}}
+\tableofcontents
+\newpage
+
+\listoftables
+\newpage
+
+\listoffigures
+\newpage
+
+\section{Постановка задачи}
+Даны данные из Африки и Арктики, полученные в результате флуоресцентной спектроскопии. Это матрицы эмиссии. Они имеют участки высокой интенсивности, возникающие в результате излучения Релея. \\
+Необходимо программно вырезать эти участки, посчитать интегралы по заданным зонам в разных пробах и составить гистограммы интенсивностей отдельно для проб Африки и Арктики.
+
+\section{Теория}
+\subsection{Компоненты флуоресценции}
+Заданны следующие группы:
+\begin{table}[!ht]
+	\centering
+		\begin{tabular} {|c|c|c|c|}
+			\hline
+			$E_{x_max}(nm)$ & $E_{m_max}(nm)$ & Тип компонента & Буквенное обозначение \\ \hline
+			 320-350 & 420-480 & Humic-like & C \\ \hline
+			 250-260 & 380-480 & Humic-like & A \\ \hline
+			 310-320 & 380-420 & Marine Humic-like & M \\ \hline
+			 270-280 & 300-320 & Tyrosine-like, Protein-like & B \\ \hline
+			 270-280 & 320-350 & Tryptophane-like, Protein-like or phenol-like & T \\ \hline
+		\end{tabular}
+		\caption{Компоненты флуоресценции}
+\end{table}
+
+\section{Реализация}
+Работа выполнена с помощью встроенных средств языка программирования R в среде разработки RStudio. Для работы с данными использовалась библиотека EEM. Исходный код работы приведён в приложении.\\
+\\
+Рассмотрим обработку данных на примере проб 1701 из Арктики и $1.1\_70$ из Африки. Визуально их можно представить так:
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Arctic_1.png}
+    \caption{Арктика. Проба 1701}
+\end{figure}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Africa_1.png}
+    \caption{Африка. Проба $1.1\_70$}
+\end{figure}
+\newpage
+Обработаем их с помощью метода delScattering2 библиотеки EEM. Получим:
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Arctic_2.png}
+    \caption{Арктика. Проба 1701}
+\end{figure}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Africa_2.png}
+    \caption{Африка. Проба $1.1\_70$}
+\end{figure}
+\newpage
+Для получения компонент флуоресценции используем метод cutEEM. Полученные участки можно представить так:
+ \begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Arctic_3_C.png}
+    \caption{Арктика. Проба 1701. C}
+\end{figure}
+ \begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Arctic_3_A.png}
+    \caption{Арктика. Проба 1701. A}
+\end{figure}
+ \begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Arctic_3_M.png}
+    \caption{Арктика. Проба 1701. M}
+\end{figure}
+\newpage
+ \begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Arctic_3_B.png}
+    \caption{Арктика. Проба 1701. B}
+\end{figure}
+ \begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Arctic_3_T.png}
+    \caption{Арктика. Проба 1701. T}
+\end{figure}
+
+ \begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Africa_3_C.png}
+    \caption{Африка. Проба $1.1\_70$. C}
+\end{figure}
+\newpage
+ \begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Africa_3_A.png}
+    \caption{Африка. Проба $1.1\_70$. A}
+\end{figure}
+ \begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Africa_3_M.png}
+    \caption{Африка. Проба $1.1\_70$. M}
+\end{figure}
+ \begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Africa_3_B.png}
+    \caption{Африка. Проба $1.1\_70$. B}
+\end{figure}
+\newpage
+ \begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Africa_3_T.png}
+    \caption{Африка. Проба $1.1\_70$. T}
+\end{figure}
+Значения интегралов по группам для этих 2 проб представлены в таблице:
+\begin{table}[!ht]
+	\centering
+		\begin{tabular} {|c|c|c|c|c|c|}
+			\hline
+			Проба & C & A & M & B & T \\ \hline
+			Арктика. 1701 & 254511 & 106220 & 53529 & 7156 & 12151 \\ \hline 
+			Африка. $1.1\_70$ & 27637 & 15902 & 8280 & 8848 & 18995 \\ \hline 
+		\end{tabular}
+		\caption{Арктика 1701. Африка $1.1\_70$}
+\end{table}
+
+\section{Результаты}
+Полученные данные были почищены, по заданным группам для каждой пробы были посчитаны интегралы. Результаты представлены в гистограммах.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Africa_C.png}
+    \caption{Африка. Группа C}
+\end{figure}
+\newpage
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Africa_A.png}
+    \caption{Африка. Группа A}
+\end{figure}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Africa_M.png}
+    \caption{Африка. Группа M}
+\end{figure}
+\newpage
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Africa_B.png}
+    \caption{Африка. Группа B}
+\end{figure}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Africa_T.png}
+    \caption{Африка. Группа T}
+\end{figure}
+\newpage
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Arctic_C.png}
+    \caption{Арктика. Группа C}
+\end{figure}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Arctic_A.png}
+    \caption{Арктика. Группа A}
+\end{figure}
+\newpage
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Arctic_M.png}
+    \caption{Арктика. Группа M}
+\end{figure}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Arctic_B.png}
+    \caption{Арктика. Группа B}
+\end{figure}
+\newpage
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/Arctic_T.png}
+    \caption{Арктика. Группа T}
+\end{figure}
+
+
+\section{Приложения}
+Репозиторий на Github с кодом лабораторной работы:\\
+\url{https://github.com/VsevolodMelnikov/Math_Stat/tree/master/project}
+
+\end{document}
